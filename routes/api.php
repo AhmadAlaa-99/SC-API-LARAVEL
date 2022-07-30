@@ -15,8 +15,8 @@ use App\Http\Controllers\QueryController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\EventController;
 //QUERY
-Route::get('query',[QueryController::class,'query']);
-// Auth
+//Route::get('query',[QueryController::class,'query']);
+// Auth 
 Route::post('register',[AuthController::class,'register']); //notify email
 Route::post('activate',[AuthController::class,'ActivateEmail']);  //with notify dtabase broadcast
 Route::post('login',[AuthController::class,'login'])->name('login'); 
@@ -27,6 +27,7 @@ Route::middleware('auth:api')->group(function()  //,'verified'
 {
     //inf user
     Route::get('user',[AuthController::class,'showinf']);
+    Route::post('setUpProfile',[AuthController::class,'setUpProfile']);
     //Friends  
     Route::post('SendRequestFriend/{id}',[UserController::class,'SendRequest']);  //with notify dtabase broadcast
     Route::post('checkstatusfriend/{id}',[UserController::class,'checkstatusfriend']);   
@@ -124,7 +125,8 @@ Route::post('deleteconv/{id}', [ConversationsController::class, 'destroy']);
 //EVENTS 
 Route::post('newEvent',[EventController::class,'store']);
 
-//Notification  
+//Notification
+  
 //show all notifaction 
 Route::get('allnotify',[NotificationController::class,'showAllNotify']);
 //show All UnreadNotify
@@ -144,7 +146,5 @@ Route::post('resetPassword', [AuthController::class, 'resetPassword']); //requir
 //reset email
 Route::post('resetEmail', [AuthController::class, 'resetEmail']);  //require password and activate newEmail 
 Route::post('logout',[AuthController::class,'logout']);
-
-
 });
 

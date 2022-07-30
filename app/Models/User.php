@@ -20,10 +20,10 @@ class User extends Authenticatable implements MustVerifyEmail
      */
 
     protected $guarded=[];
-   /* protected $fillable = [
-        'name',
+ /*  protected $fillable = [
         'email',
         'password',
+        'c_password',
     ]; */
 
     /**
@@ -48,6 +48,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     protected $appends = [
         'avatar_url',
+        'age'
     ];
     public function sendPasswordResetNotification($token)
     {
@@ -109,5 +110,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return hasOne('App\Models\Picture');
 
     }
+    /*
+    public function getAgeAttribute
+    {
+        return Carbon::parse($this->attributes)
+    }
+    */
 }
 

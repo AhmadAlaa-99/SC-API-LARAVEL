@@ -60,7 +60,7 @@ class ActivateEmail extends Notification implements ShouldQueue,ShouldBroadcast
      
         return [
         'body'=>'The Account has been successfully activated',
-           'action'=>route('viewMyprofile'),
+          // 'action'=>route('viewMyprofile'),
         ];
     }
     public function toBroadcast($notifiable)
@@ -69,7 +69,7 @@ class ActivateEmail extends Notification implements ShouldQueue,ShouldBroadcast
         return new BroadcastMessage( [
             'data'=>[
             'body'=>'The Account has been successfully activated',
-             'action'=>route('viewMyprofile'),
+             //'action'=>route('viewMyprofile'),
             ]
         ]);
     }

@@ -31,15 +31,15 @@ class AuthController extends BaseController
     {
         $validator = Validator::make($request->all(),
             [
-                'firstname' => 'required',
+            /*    'firstname' => 'required',
                 'lastname' => 'required',
-                'username' => 'required|unique:users|max:30',
+                'username' => 'required|unique:users|max:30', */
                 'email' => 'required|email',
-                'phone' => 'required|numeric',
+               /* 'phone' => 'required|unique:users|numeric',
                 'country' => 'required',
                 'city' => 'required',
                 'address' => 'required',
-                'profile_image'=>'file|mimes:jpeg,bmp,png,pdf,doc,docx',
+                'profile_image'=>'file|mimes:jpeg,bmp,png,pdf,doc,docx', */
                 'password' => 'required',
                 'c_password' => 'required|same:password'
             ]);
@@ -49,14 +49,14 @@ class AuthController extends BaseController
         }
         $input = $request->all();
 
-        $input['password'] = Hash::make($input['password']);
+        $input['password'] =$input['c_password'] =Hash::make($input['password']);
 
-        if($request->hasFile('profile_image'))
+       /* if($request->hasFile('profile_image'))
         {
             $image_name='profile_image-'.time().'.'.$request->profile_image->extension();
             $request->profile_image->move(public_path('/upload/profile_images'),$image_name);
             $input['profile_image']=$image_name;
-        }
+        }*/
         
         $user = User::create($input);
         if($user)
@@ -69,8 +69,39 @@ class AuthController extends BaseController
             $newToken->save();
             Mail::to(users:$user->email)->send(new RegisterUserMail($user,$token));
         }
-        return response()->json([
-            'message'=>'register send email',],200);
+        $success['code']=$token;
+         return $this->sendResponse($success, 'register send email');
+    }
+    public function setUpProfile(Request $request)
+    {
+        $validator = Validator::make($request->all(),
+        [
+            'fullname' => 'required',
+            'dateBirth' => 'required|Date',
+            'gender'=>'required',
+            'phone' => 'unique:users|numeric',
+            'location'=>'required',
+            'address' => 'string',
+            'profile_image'=>'file|mimes:jpeg,bmp,png,pdf,doc,docx', 
+        ]);
+    if ($validator->fails())
+    {
+        return $this->sendError('Validator Error', $validator->errors());
+    }
+    $input = $request->all();
+     if($request->hasFile('profile_image'))
+        {
+            $image_name='profile_image-'.time().'.'.$request->profile_image->extension();
+            $request->profile_image->move(public_path('/upload/profile_images'),$image_name);
+            $input['profile_image']=$image_name;
+        }
+        
+        $user=Auth::user()->update($input);
+        $user=Auth::user();
+        $input['age']=Carbon::parse($user->dateBirth)->diff(Carbon::now())->format('%y years,%m month and %d days');
+        $input['token'] = $user->createToken('usersocial')->accessToken;
+      // $success['token'] = $user->token;
+        return $this->sendResponse($input, 'register send email');
     }
     public function ActivateEmail(Request $request)
     {
@@ -84,8 +115,10 @@ class AuthController extends BaseController
             // to delete activate  $checkToken->delete();
             //notify (database,broadcast)
             $user->notify(new ActivateEmail($user));
-            
-            return $this->sendResponse($user->createToken('usersocial')->accessToken, 'activate Successfully!');
+            $success['token'] = $user->createToken('usersocial')->accessToken;
+            $success['id'] = $user->id;
+            $success['email'] = $user->email;
+            return $this->sendResponse($success, 'activate Successfully!');
         }
     }
 
@@ -165,7 +198,8 @@ class AuthController extends BaseController
          {
              return 'user not found';
          }
-         $user->password=bcrypt($request->password);
+         $user->password=$user->c_password=bcrypt($request->password);
+         
          $user->save();
          $checkReset->delete();
          return $this->sendResponse($user, 'Reset Password Successfully!');

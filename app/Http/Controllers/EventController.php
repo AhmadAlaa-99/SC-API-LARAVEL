@@ -42,7 +42,7 @@ class EventController extends BaseController
         $validator = Validator::make($input, [
             'Content' => 'required',
             'Category'=>'required',
-            'photo' => 'required|image|mimes:jpg,bmp,png',
+            'photo' => 'image|mimes:jpg,bmp,png',
            // 'event_at'=>'required|date_format:m/d/y'
             'month'=>'required',
             'day'=>'required',

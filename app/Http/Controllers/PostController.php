@@ -66,6 +66,7 @@ class PostController extends BaseController
         $input = $request->all();
         $validator = Validator::make($input, [
             'Content' => 'required',
+            'Category'=>'required',
             'photo' => 'image|mimes:jpg,bmp,png'
         ]);
       // return $input;
