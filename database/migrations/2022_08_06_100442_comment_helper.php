@@ -13,8 +13,8 @@ class CommentHelper extends Migration
      */
     public function up()
     {
-        $table->foreignId('post_id')->references('id')->on('posts')->onDelete('cascade');
-        $table->string('conent');
+        //$table->foreignId('post_id')->references('id')->on('posts')->onDelete('cascade');
+      //  $table->string('conent');
     }
 
     /**
