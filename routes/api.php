@@ -27,8 +27,9 @@ Route::get('dashboard\helper',[HelperController::class,'index']);
 //Helper//
 Route::middleware('auth:api','checkAdmin')->group(function()
 {
-
+  Route::get('dashboard\admin',[AdminController::class,'index']);
 });
+
 // Auth 
 Route::post('register',[AuthController::class,'register']); //notify email
 Route::post('activate',[AuthController::class,'ActivateEmail']);  //with notify dtabase broadcast

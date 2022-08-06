@@ -216,6 +216,23 @@ class UserController extends BaseController
         return response()->json(['my_profile' => $MyProfile ]);
         
 }
+public function reportUser(Request $request)
+{
+    $user=User::where('id',$request->id)->get();
+    DB::table('user_helper')->insert(
+        'user_id'=>Auth::id()
+    )
+
+
+}
+public function reportComment(Request $request,$id)
+{
+
+}
+public function reportPost()
+{
+
+}
 }
 
 

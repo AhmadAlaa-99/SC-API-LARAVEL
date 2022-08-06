@@ -15,8 +15,8 @@ class CreateRequestHelpersTable extends Migration
     {
         Schema::create('request_helpers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sender_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('receive_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('post_id')->references('id')->on('posts')->onDelete('cascade');
+            $table->string('conent');
             $table->timestamps();
         });
     }
