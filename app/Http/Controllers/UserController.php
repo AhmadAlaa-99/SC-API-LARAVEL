@@ -220,6 +220,9 @@ public function reportUser(Request $request)
 {
     $user=User::where('id',$request->id)->get();
     DB::table('user_helper')->insert(
+        'user_d'=>Auth::id,
+        'other_id'=>$request->id,
+        'content'=>$request->content,
       //  'user_id'=>Auth::id()
     )
 
