@@ -23,4 +23,8 @@ class Post extends Model
     {
         return $this->hasMany('App\Models\Like');
     }
+    public function latestComments()
+    {
+        return $this->comments()->latest()->nPerGroup('post_id', 3);
+    }
 }

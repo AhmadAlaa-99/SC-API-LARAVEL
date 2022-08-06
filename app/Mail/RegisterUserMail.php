@@ -32,7 +32,7 @@ class RegisterUserMail extends Mailable
     {
         //$url=url(path:'api/activate/'.$this->token);
         $code=$this->token;
-        return $this->from(address:'ahmad@gmai.com')->view(view:'mail.register')->with([
+        return $this->from(address:'ahmad@gmai.com')->view(view:'Mail.register')->with([
             'name'=>$this->user->name,
          // 'url'=>$url,
          'code'=>$code,

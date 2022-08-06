@@ -16,10 +16,11 @@ class CommentController extends BaseController
     {
         $input = $request->all();
         $validator = Validator::make($input, [
-            'Comment' => 'required',
+            'Comment' => 'required|max:50|min:3',
         ]);
         if ($validator->fails()) {
-            return $this->sendError('validate Error', $validator->errors());
+            return $this->sendError($validator->errors()->first());
+            //return $this->sendError('validate Error', $validator->errors());
         }
         $user = Auth::user();
         $input['user_id'] = Auth::id();
@@ -30,10 +31,10 @@ class CommentController extends BaseController
             'user_id' => $input['user_id'],
         ]);
         $post=Post::findOrFail($id);
-        $infUser=User::where('id',$input['user_id'])->select('id','username','profile_image')->first();
+        $infUser=User::where('id',$input['user_id'])->select('id','fullname','profile_image')->first();
         $ownerID=Post::select('user_id')->where('id',$id)->first();
         $ownerPost=User::where('id',$ownerID->user_id)->first();
-      $ownerPost->notify(new CommentPostNotify($infUser,$post));
+     // $ownerPost->notify(new CommentPostNotify($infUser,$post));
       return $this->sendResponse($Comment, 'Comment added successfully');
     }
     public function update(Request $request,$id)
@@ -48,10 +49,11 @@ class CommentController extends BaseController
         }
 
         $validator = Validator::make($input, [  // arg make must be array
-            'Comment' => 'String',
+            'Comment' => 'required|max:50|min:3',
         ]);
         if ($validator->fails()) {
-            return $this->sendError('validation error', $validator->errors());
+           // return $this->sendError('validation error', $validator->errors());
+           return $this->sendError($validator->errors()->first());
         }
         $Comment->update([
             'Comment'=>$request->Comment,
@@ -59,7 +61,7 @@ class CommentController extends BaseController
         $infUser=User::where('id',$input['user_id'])->select('id','username','profile_image')->get();
         $ownerID=Post::select('user_id')->where('id',$id)->first();
         $ownerPost=User::where('id',$ownerID)->first();
-        $ownerPost->notify(new CommentPostNotify($infUser));
+       // $ownerPost->notify(new CommentPostNotify($infUser));
 
         return $this->sendResponse($Comment, 'Comment update');
 
@@ -67,7 +69,8 @@ class CommentController extends BaseController
 
     public function postComments($id)
     {
-        $comments=Comment::where('post_id',$id)->select('user_id','comment')->get();
+        $comments=Comment::where('post_id',$id)->get();
+      //  $comments=Comment::where('post_id',$id)->select('user_id','comment')->get();
         return $this->sendResponse($comments, 'Post Comments');
     }
 

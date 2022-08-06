@@ -53,7 +53,7 @@ class UserController extends BaseController
 
         $friends_ids=array();
         $friends_ids=array_merge($friend_ids1,$friend_ids2);  //1 5 8
-        $friendsList=User::whereIn('id', $friends_ids)->select('firstname','profile_image')->orderBy('id','Desc')->get();
+        $friendsList=User::whereIn('id', $friends_ids)->select('fullname','profile_image')->orderBy('created_at','Desc')->get();
         //where : return just firstuser but whereIn return all user
         return $this->sendResponse($friendsList, 'List User Friends');
     }
@@ -74,7 +74,6 @@ class UserController extends BaseController
                 {
                     $friendstatus="Friend Requst Sent";
                 }
-
             }
             else
             {
@@ -134,7 +133,7 @@ class UserController extends BaseController
         $Sender=User::where(['id'=>$sender_id])->first();
        // return $Sender;
         // User::whereId($sender_id)->notify(new FriendRequestAccept($user)); //error builder
-        $Sender->notify(new FriendRequestAcceptNotification($receiver)); 
+       // $Sender->notify(new FriendRequestAcceptNotification($receiver)); 
         //Call to undefined method Illuminate\Database\Eloquent\Builder::notify() --> not forget get/first with where 
         //note : with get error but first work 
         // get:     first: 
@@ -195,7 +194,7 @@ class UserController extends BaseController
 
     public function viewMyProfile()
     {
-        $myfriends=$this->myfriends();
+       /* $myfriends=$this->myfriends();
 
         $user=Auth::User()->id;
         $MyProfile=User::where('id',$user)->select('id','firstname','lastname','username'
@@ -205,5 +204,19 @@ class UserController extends BaseController
             ])->get();    
 
         return response()->json(['my_profile' => $MyProfile, 'myfriends' =>$myfriends ]);
+        */
+        //$myfriends=$this->myfriends();
+
+        $user=Auth::User()->id;
+        $MyProfile=User::where('id',$user)
+        ->with([
+            'posts' => function($builder) {$builder->withCount('comments','likes');},
+            ])->get();    
+
+        return response()->json(['my_profile' => $MyProfile ]);
+        
 }
 }
+
+
+

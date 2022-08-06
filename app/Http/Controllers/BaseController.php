@@ -19,17 +19,17 @@ class BaseController
        return response()->json($response,200);
 
   }
-  public function sendError($error,$errorMessage=[],$code=404)
+  public function sendError($errorMessage)
   {
        $response=[
            'success'=>false,
-           'message'=>$error
+           'data'=>null
        ];
        if(!empty($errorMessage))
        {
-           $response['data']=$errorMessage;
+           $response['message']=$errorMessage;
        }
-       return response()->json($response,$code);
+       return response()->json($response);
 
   }
 

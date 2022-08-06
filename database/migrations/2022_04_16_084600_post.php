@@ -17,7 +17,7 @@ class Post extends Migration
             $table->id();
             $table->string('user_id');
             $table->string('Content');
-            $table->string('Category');
+            $table->string('Category')->nullable();
             $table->string('photo');
             $table->timestamps();
         });

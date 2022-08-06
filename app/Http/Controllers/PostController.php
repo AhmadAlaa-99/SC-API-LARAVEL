@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\BaseController as BaseController;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Carbon; 
 use App\Http\Controller\UserController;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -37,7 +37,6 @@ class PostController extends BaseController
         {
             return $this->sendError('OWNERPOSTS NOT FRIEND');
         }
-
     }
     ##################################################################
     /* get all post friends with my post in page newFeed(Order Date) */
@@ -56,23 +55,24 @@ class PostController extends BaseController
       
         $friendsPost=Post::withCount('comments','likes')->whereIn('user_id', $friends_ids)->orderBy('id','Desc')->get();
        */
-        $post=Post::withCount('comments','likes')->orderBy('id','Desc')->get();
-        return $this->sendResponse($friendsPost, 'Post My Friends');  
+        $post=Post::withCount('comments','likes')->orderBy('created_at','desc')->paginate('8');
+        return $this->sendResponse($post, 'Post My Friends');  
      }
 
     /* add new post  */
     public function store(Request $request)
     {
+        //return 'h';
         $input = $request->all();
         $validator = Validator::make($input, [
-            'Content' => 'required',
-            'Category'=>'required',
-            'photo' => 'image|mimes:jpg,bmp,png'
+            'Content' => 'string',
+        //   'Category'=>'required',
+            'photo' => 'required|image|mimes:jpg,bmp,png'
         ]);
       // return $input;
         if ($validator->fails()) {
-            return $this->sendError('validate Error', $validator->errors());
-        }
+            return $this->sendError($validator->errors()->first());
+        } 
         $user = Auth::user();
         $input['user_id'] = Auth::id();
         $image_name = time() . '.' . $request->photo->extension();
@@ -84,7 +84,7 @@ class PostController extends BaseController
             'photo' => $image_name,
 
         ]);
-         $myfriendsID=app('App\Http\Controllers\UserController')->myfriends();
+     //    $myfriendsID=app('App\Http\Controllers\UserController')->myfriends();
          /*
         return $myfriendsID;  
         "data": [
@@ -96,15 +96,15 @@ class PostController extends BaseController
         }
         */
       //  return $myfriendsID->id;
-        
+        /*
         foreach($myfriendsID as $friends)
         {
            // return $myfriendsID[0]->id;
             $myfriends=User::where('id',$friends->id)->first();
-            $myfriends->notify(new FriendsPost($user));
+         ///   $myfriends->notify(new FriendsPost($user));
             
         }
-        
+        */
 
         /*
         //send notify for friends 
@@ -121,6 +121,7 @@ class PostController extends BaseController
     /* get Post information by id */
     public function show($id)
     {
+        /*
         $user_id=Auth::user()->id;
         $friends_id1=array();
         $friends_id1=Friend::where(['friend_id'=>$user_id,'accept'=>1])->get();
@@ -133,7 +134,15 @@ class PostController extends BaseController
 
         $Post= Post::with('comments','likes')->where(['id'=>$id,'user_id'=>$friends])->get();
 
+        */
         
+        $Post= Post::with([
+            'comments',function($query)
+            {
+                $query->orderBy('created_at','desc')->take(3);
+            }
+        ],'likes')->withCount('likes','comment')->get();
+
         if (is_null($Post))
          {
             return $this->sendError('post not found');
@@ -174,16 +183,16 @@ class PostController extends BaseController
         }
 
         $validator = Validator::make($input, [
-            'Content' => 'String',
-            'Category'=>'String',
+            'Content' => 'required|String',
+           // 'Category'=>'String',
         ]);
         if ($validator->fails()) {
-            return $this->sendError('validation error', $validator->errors());
+            return $this->sendError($validator->errors()->first());
         }
 
        $Post->update([
         'Content' =>$request->Content,
-        'Category'=>$request->Category,
+       // 'Category'=>$request->Category,
        ]);
         return $this->sendResponse($Post, 'post update');
     }
@@ -211,7 +220,7 @@ class PostController extends BaseController
         $data['post_id']=$id;
         $data['user_id']=auth::id();
         Like::firstOrCreate($data,$data);
-        $infUser=User::where('id',$user_id)->select('id','username','profile_image')->first();
+        $infUser=User::where('id',$user_id)->select('id','fullname','profile_image')->first();
        // return $infUser;
         $ownerID=Post::select('user_id')->where('id',$id)->first();
         $ownerPost=User::where('id',$ownerID->user_id)->first();
@@ -227,8 +236,8 @@ class PostController extends BaseController
 
     public function postLikes($id)
     {
-        $users=Like::where('post_id',$id)->pluck('user_id');
-        $users=User::where('id',$users)->select('username','profile_image')->get();
+        $likes=Like::where('post_id',$id)->pluck('user_id');
+        $users=User::where('id',$likes)->select('fullname','profile_image')->get();
         return $this->sendResponse($users, 'postLikes');
     }
 

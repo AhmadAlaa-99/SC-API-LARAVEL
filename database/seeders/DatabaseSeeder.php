@@ -1,9 +1,6 @@
 <?php
 
 namespace Database\Seeders;
-
-
-
 use Illuminate\Database\Seeder;
 use Database\Seeders\UserSeeder;
 class DatabaseSeeder extends Seeder
@@ -17,7 +14,9 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-            UserSeeder::class,
+           // UserSeeder::class,
+            HelperSeeder::Class,
+            AdminSeeder::Class,
         ]);
 
         // \App\Models\User::factory(10)->create();

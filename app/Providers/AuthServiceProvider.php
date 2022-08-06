@@ -36,5 +36,6 @@ class AuthServiceProvider extends ServiceProvider
         });
 
 //        passport::routes();
+        
     }
 }

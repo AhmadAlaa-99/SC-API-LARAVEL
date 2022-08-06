@@ -14,17 +14,30 @@ use App\Http\Controllers\ConversationsController;
 use App\Http\Controllers\QueryController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\EventController;
-//QUERY
-//Route::get('query',[QueryController::class,'query']);
+use App\Http\Controllers\Helper\HelperController aS HelperController;
+
+
+
+
+//Admin//
+Route::middleware('auth:api','checkHelper')->group(function()
+{
+Route::get('dashboard\helper',[HelperController::class,'index']);
+});
+//Helper//
+Route::middleware('auth:api','checkAdmin')->group(function()
+{
+
+});
 // Auth 
 Route::post('register',[AuthController::class,'register']); //notify email
 Route::post('activate',[AuthController::class,'ActivateEmail']);  //with notify dtabase broadcast
 Route::post('login',[AuthController::class,'login'])->name('login'); 
-Route::post('forgotpasswordCreate', [AuthController::class, 'forgotPasswordCreate']);//notify email 
-Route::post('forgotpassword', [AuthController::class, 'forgotPasswordToken']);  //request code
-
+Route::post('sendVerificationCode', [AuthController::class, 'forgotPasswordCreate']);//notify email 
+Route::post('ConfirmCode', [AuthController::class, 'ConfirmCode']);//notify email
 Route::middleware('auth:api')->group(function()  //,'verified'
 {
+  Route::post('CreateNewPassword', [AuthController::class, 'forgotPasswordToken']);  //request code
     //inf user
     Route::get('user',[AuthController::class,'showinf']);
     Route::post('setUpProfile',[AuthController::class,'setUpProfile']);
@@ -37,6 +50,9 @@ Route::middleware('auth:api')->group(function()  //,'verified'
     Route::post('FriendRequestAccept/{id}',[UserController::class,'FriendRequestAccept']); //with notify dtabase broadcast
     Route::post('FriendRequestRefuse/{id}',[UserController::class,'FriendRequestRefuse']);
     Route::get('myfriends',[UserController::class,'myfriends']);
+
+    Route::get('friendsRequests',[UserController::class,'friendsrequestsReceive']);
+    
     Route::get('Userfriend/{id}',[UserController::class,'friends']);
 
 //Messanger
@@ -55,22 +71,15 @@ Route::post('conversations/{id}/read', [ConversationsController::class, 'markAsR
 //Delete Conversation
 Route::post('deleteconv/{id}', [ConversationsController::class, 'destroy']);
 //show friend online
-
-
    //POST
     /* get all post with count likes and comments for post */
   //  Route::get('posts',[PostController::class,'index']);
     /* add new post  */ /*notify addpost for friends*/
    Route::post('newpost',[PostController::class,'store']);
-
-
      //page : new feed get all post friends with myposts with count likes and comments for post just (order date)
    Route::get('AllPost',[PostController::class,'AllPost']);
      /* get post information by id with count likes and comments for post and content*/
     Route::get('getpostid/{id}',[PostController::class,'show']);
-    
-
-
      /* delete post by id if only the user is the owner  */
     Route::delete('deletepost/{id}',[PostController::class,'destroy']);
      /* update post by id if only the user is the owner  */
@@ -89,14 +98,10 @@ Route::post('deleteconv/{id}', [ConversationsController::class, 'destroy']);
     Route::post('postLikes/{id}',[PostController::class,'postLikes']);
     /* update comment */
     Route::post('updatecomment/{id}',[CommentController::class,'update']);
-
-    
     /* Like post with notify*/
-    Route::post('post/{id}/like',[PostController::class,'Like']);
+    Route::post('likepost/{id}',[PostController::class,'Like']);
     /* DisLike post */
-    Route::delete('post/{id}/dislike',[PostController::class,'DisLike']);
-
-
+    Route::delete('dislikepost/{id}',[PostController::class,'DisLike']);
     //GROUPS
     Route::post('createGroup',[GroupController::class,'create']);
     Route::post('createPostGroup/{group_id}',[GroupController::class,'createpost']);  //like ,comment same post
@@ -112,16 +117,12 @@ Route::post('deleteconv/{id}', [ConversationsController::class, 'destroy']);
     Route::post('dimissalGroup/{group_id}/{user_id}',[GroupController::class,'dimissalGroup']);
     Route::post('deleteMyGroup/{group_id}',[GroupController::class,'deleteMyGroup']);
     Route::get('showOwnerGroup',[GroupController::class,'showOwnerGroup']);
-
     Route::get('joinedGroup',[GroupController::class,'joinedGroup']);
     Route::get('requestedGroup',[GroupController::class,'requestedGroup']);
     Route::get('proposedGroup',[GroupController::class,'proposedGroup']);
     Route::get('SearchGroup',[GroupController::class,'SearchGroup']);
     Route::get('MyPostsGroup/{group_id}',[GroupController::class,'MyPostsGroup']);
     Route::get('PostMemberGroup/{user_id}/{group_id}',[GroupController::class,'PostMemberGroup']);
-
-
-
 //EVENTS 
 Route::post('newEvent',[EventController::class,'store']);
 
@@ -133,14 +134,11 @@ Route::get('allnotify',[NotificationController::class,'showAllNotify']);
 Route::post('unreadnotify',[NotificationController::class,'showAllUnreadNotify']);
 //make notification read
 Route::post('makenotifyread',[NotificationController::class,'markAsReadNotify']);
-
-
 //Profile
 Route::get('viewprofile/{id}',[UserController::class,'viewProfile'])->name('viewprofile');  //user or friend acc id
 Route::get('viewMyProfile',[UserController::class,'viewMyProfile']);  
-
-
 //setting
+
 //reset password 
 Route::post('resetPassword', [AuthController::class, 'resetPassword']); //require OldPassword
 //reset email
