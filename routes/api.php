@@ -19,6 +19,14 @@ use App\Http\Controllers\Helper\HelperController aS HelperController;
 
 
 
+
+
+Route::middleware('auth:api','checkToken')->group(function()
+{
+  Route::post('dashboard',function() {
+
+  });
+});
 //Admin//
 Route::middleware('auth:api','checkHelper')->group(function()
 {

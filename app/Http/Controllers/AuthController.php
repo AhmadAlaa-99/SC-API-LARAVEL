@@ -165,6 +165,7 @@ class AuthController extends BaseController
             $success['phone'] = $user->phone;
             $success['location'] = $user->location;
             $success['address'] = $user->address;
+            $success['role_as'] = $user->role_as;
             $success['profile_image'] = $user->profile_image;
             return $this->sendResponse($success, 'login Successfully!');
         }

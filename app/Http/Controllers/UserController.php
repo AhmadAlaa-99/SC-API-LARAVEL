@@ -219,23 +219,39 @@ class UserController extends BaseController
 public function reportUser(Request $request)
 {
     $user=User::where('id',$request->id)->get();
-    DB::table('user_helper')->insert(
+
+    DB::table('user_helper')->insert([
         'user_d'=>Auth::id,
         'other_id'=>$request->id,
         'content'=>$request->content,
       //  'user_id'=>Auth::id()
-    )
-
-
+    ]);
 }
 public function reportComment(Request $request,$id)
 {
+    $comments=Comment::where('id',$id)->get();
+  //  $post=Post::where('id','')
 
+    $comment_id=User::where('id')
+        DB::table('comment_helper')->insert([
+        'user_d'=>Auth::id,
+        'other_id'=>$other_id,
+        'content'=>$request->content,
+      //  'user_id'=>Auth::id()
+    ]);
 }
 public function reportPost()
 {
-
+    DB::table('user_helper')->insert([
+        'user_d'=>Auth::id,
+        'other_id'=>$request->id,
+        'content'=>$request->content,
+      //  'user_id'=>Auth::id()
+    ]);
 }
+
+
+
 }
 
 

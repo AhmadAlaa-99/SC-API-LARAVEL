@@ -13,8 +13,11 @@ class PostHelper extends Migration
      */
     public function up()
     {
-      //  $table->foreignId('post_id')->references('id')->on('posts')->onDelete('cascade');
-        //$table->string('conent');
+       $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
+       $table->foreignId('other_id')->references('id')->on('users')->onDelete('cascade');
+       $table->foreignId('post_id')->references('id')->on('posts')->onDelete('cascade');
+       $table->string('content');
+       $table->integer('enum',['0','1','2']);
     }
 
     /**
