@@ -26,6 +26,7 @@ Route::group([
   'middleware'=>['auth:api','checkHelper'],
 ],function()
 {
+  
 Route::get('Complaints',[HelperController::class,'index']);
 
 Route::post('IgnoreComment/{id}',[HelperController::class,'IgnoreComment']);
@@ -35,6 +36,7 @@ Route::post('IgnoreUser/{id}',[HelperController::class,'IgnoreUser']);
 Route::post('AcceptUser/{id}',[HelperController::class,'AcceptUser']);
 Route::post('AcceptPost/{id}',[HelperController::class,'AcceptPost']);
 Route::post('AcceptComment/{id}',[HelperController::class,'AcceptComment']);
+
 });
 //Admin//
 Route::group([

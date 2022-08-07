@@ -49,21 +49,25 @@ class AdminController extends Controller
   {
       $user_id=  DB::table('user_helper')->where('id',$id)->pluck('user_id');
       DB::table('users')->where('id',$user_id)->delete();
+      DB::table('user_helper')->where('id',$id)->delete();
   }
   public function unActiveUser($id)
   {
     $user_id=  DB::table('user_helper')->where('id',$id)->pluck('user_id');
       DB::table('users')->where('id',$user_id)->delete();
+
   }
   public function DeleteComment($id)
   {
     $comment_id=  DB::table('comment_helper')->where('id',$id)->pluck('comment_id');
       DB::table('comments')->where('id',$comment_id)->delete();
+      DB::table('comment_helper')->where('id',$id)->delete();
   }
   public function DeletePost($id)
   {
     $post_id=DB::table('post_helper')->where('id',$id)->pluck('post_id');
       DB::table('post')->where('id',$post_id)->delete();
+      DB::table('post_helper')->where('id',$id)->delete();
   }
 
   public function Helpers()
