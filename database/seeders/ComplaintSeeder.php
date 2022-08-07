@@ -24,8 +24,8 @@ class ComplaintSeeder extends Seeder
         for($i=0; $i<10 ;$i++)
         {
         DB::table('user_helper')->insert([
-            'user_id'=>rand(6,12),
-            'content'=>$faker->paragraph(),
+            'user_id'=>rand(5,9),
+            'content'=>$faker->paragraph(2, true),
         ]);
     }
 
@@ -34,15 +34,15 @@ class ComplaintSeeder extends Seeder
         {
         DB::table('post_helper')->insert([
             'post_id'=>rand(1,5),
-            'content'=>$faker->paragraph(),
+            'content'=>$faker->paragraph(2, true),
         ]);
     }
         //COMMENT
         for($i=0; $i<15 ;$i++)
         {
         DB::table('comment_helper')->insert([
-            'content'=>$faker->paragraph(),
-            'comment_id'=>rand(1,20),
+            'content'=>$faker->paragraph(2, true),
+            'comment_id'=>rand(1,12),
           //  'user_id'=>Auth::id()
         ]);
     }

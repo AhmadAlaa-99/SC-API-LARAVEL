@@ -18,7 +18,7 @@ class CommentHelper extends Migration
      //   $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
        // $table->foreignId('other_id')->references('id')->on('users')->onDelete('cascade');
         //$table->foreignId('post_id')->references('id')->on('post')->onDelete('cascade');
-        $table->foreignId('comment_id')->references('id')->on('post')->onDelete('cascade');
+        $table->foreignId('comment_id')->references('id')->on('comments')->onDelete('cascade');
         $table->string('content');
         $table->enum('status',['0','1','2'])->default('0');  
         $table->timestamps();
