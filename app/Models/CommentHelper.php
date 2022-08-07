@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class CommentHelper extends Model
 {
     use HasFactory;
-    protected $table = 'helpers';
+    protected $table = 'comment_helper';
     protected $guarded=[];
     public function comments()
     {

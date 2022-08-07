@@ -10,8 +10,9 @@ class UserHelper extends Model
     use HasFactory;
     protected $table = 'user_helper';
     protected $guarded=[];
+
     public function users()
     {
-        
+
     }
 }

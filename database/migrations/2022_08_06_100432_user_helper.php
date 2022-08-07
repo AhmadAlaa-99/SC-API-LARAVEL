@@ -13,11 +13,15 @@ class UserHelper extends Migration
      */
     public function up()
     {
+        Schema::create("user_helper", function ($table) {
+            $table->id();
         $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-        $table->foreignId('other_id')->references('id')->on('users')->onDelete('cascade');
+      //  $table->foreignId('other_id')->references('id')->on('users')->onDelete('cascade');
         $table->string('content');
-        $table->integer('enum',['0','1','2']);
-    }
+        $table->enum('status',['0','1','2'])->default('0');
+        $table->timestamps();
+    });
+}
 
     /**
      * Reverse the migrations.

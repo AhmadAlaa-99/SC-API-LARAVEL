@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PostHelper extends Model
 {
     use HasFactory;
-    protected $table = 'admins';
+    protected $table = 'post_helper';
     protected $guarded=[];
     public function posts()
     {

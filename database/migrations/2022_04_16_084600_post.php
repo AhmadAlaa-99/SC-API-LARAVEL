@@ -16,8 +16,8 @@ class Post extends Migration
         Schema::create('Post', function (Blueprint $table) {
             $table->id();
             $table->string('user_id');
-            $table->string('Content');
-            $table->string('Category')->nullable();
+            $table->string('content');
+           // $table->string('Category')->nullable();
             $table->string('photo');
             $table->timestamps();
         });

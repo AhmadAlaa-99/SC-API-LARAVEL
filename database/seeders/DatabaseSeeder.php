@@ -5,6 +5,7 @@ use Illuminate\Database\Seeder;
 use Database\Seeders\UserSeeder;
 use Database\Seeders\HelperSeeder;
 use Database\Seeders\AdminSeeder;
+use Database\Seeders\ComplaintSeeder;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -16,9 +17,12 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-           // UserSeeder::class,
+           // 
+           AdminSeeder::Class,
             HelperSeeder::Class,
-            AdminSeeder::Class,
+            UserSeeder::class,
+            ComplaintSeeder::class
+            
         ]);
 
         // \App\Models\User::factory(10)->create();

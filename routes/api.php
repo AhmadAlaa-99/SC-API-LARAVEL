@@ -14,28 +14,46 @@ use App\Http\Controllers\ConversationsController;
 use App\Http\Controllers\QueryController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\EventController;
-use App\Http\Controllers\Helper\HelperController aS HelperController;
-
-
-
-
-
-
+use App\Http\Controllers\HelperController;
+use App\Http\Controllers\AdminController;
 Route::middleware('auth:api','checkToken')->group(function()
 {
-  Route::post('dashboard',function() {
-
-  });
-});
-//Admin//
-Route::middleware('auth:api','checkHelper')->group(function()
-{
-Route::get('dashboard\helper',[HelperController::class,'index']);
+  Route::post('dashboard',function() {});
 });
 //Helper//
-Route::middleware('auth:api','checkAdmin')->group(function()
+Route::group([
+  'prefix'=>'dashboard/Helper',
+  'middleware'=>['auth:api','checkHelper'],
+],function()
 {
-  Route::get('dashboard\admin',[AdminController::class,'index']);
+Route::get('Complaints',[HelperController::class,'index']);
+
+Route::post('IgnoreComment/{id}',[HelperController::class,'IgnoreComment']);
+Route::post('IgnorePost/{id}',[HelperController::class,'IgnorePost']);
+Route::post('IgnoreUser/{id}',[HelperController::class,'IgnoreUser']);
+
+Route::post('AcceptUser/{id}',[HelperController::class,'AcceptUser']);
+Route::post('AcceptPost/{id}',[HelperController::class,'AcceptPost']);
+Route::post('AcceptComment/{id}',[HelperController::class,'AcceptComment']);
+});
+//Admin//
+Route::group([
+  'prefix'=>'dashboard/Admin',
+  'middleware'=>['auth:api','checkAdmin'],
+],function()
+{
+Route::get('Complaints',[AdminController::class,'index']);
+
+Route::post('IgnoreComment/{id}',[AdminController::class,'IgnoreComment']);
+Route::post('IgnorePost/{id}',[AdminController::class,'IgnorePost']);
+Route::post('IgnoreUser/{id}',[AdminController::class,'IgnoreUser']);
+
+Route::post('DeleteUser/{id}',[AdminController::class,'DeleteUser']);
+Route::post('DeletePost/{id}',[AdminController::class,'DeletePost']);
+Route::post('DeleteComment/{id}',[AdminController::class,'DeleteComment']);
+
+Route::get('Helpers',[AdminController::class,'Helpers']);
+Route::post('EditHelper/{id}',[AdminController::class,'EditHelper']);
 });
 
 // Auth 
@@ -153,5 +171,9 @@ Route::post('resetPassword', [AuthController::class, 'resetPassword']); //requir
 //reset email
 Route::post('resetEmail', [AuthController::class, 'resetEmail']);  //require password and activate newEmail 
 Route::post('logout',[AuthController::class,'logout']);
+//Report 
+Route::post('reportUser/{id}',[UserController::class,'reportUser']);
+Route::post('reportComment/{id}',[UserController::class,'reportComment']);
+Route::post('reportPost/{id}',[UserController::class,'reportPost']);
 });
 

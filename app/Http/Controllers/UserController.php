@@ -12,7 +12,13 @@ use Illuminate\Notifications\Notification;
 use App\Notifications\RequestFriendNotification;
 use App\Notifications\FriendRequestAcceptNotification;
 use App\Models\User;
+use App\Models\Post;
+use App\Models\Comment;
 use App\Models\Friend;
+use App\Models\UserHelper;
+use App\Models\CommentHelper;
+use App\Models\PostHelper;
+use DB;
 
 class UserController extends BaseController
 {
@@ -195,18 +201,15 @@ class UserController extends BaseController
     public function viewMyProfile()
     {
        /* $myfriends=$this->myfriends();
-
         $user=Auth::User()->id;
         $MyProfile=User::where('id',$user)->select('id','firstname','lastname','username'
         ,'phone','city','country','email','profile_image')
         ->with([
             'posts' => function($builder) {$builder->withCount('comments','likes');},
             ])->get();    
-
         return response()->json(['my_profile' => $MyProfile, 'myfriends' =>$myfriends ]);
         */
         //$myfriends=$this->myfriends();
-
         $user=Auth::User()->id;
         $MyProfile=User::where('id',$user)
         ->with([
@@ -214,44 +217,49 @@ class UserController extends BaseController
             ])->get();    
 
         return response()->json(['my_profile' => $MyProfile ]);
-        
 }
-public function reportUser(Request $request)
+public function reportUser(Request $request,$id)
 {
     $user=User::where('id',$request->id)->get();
-
-    DB::table('user_helper')->insert([
-        'user_d'=>Auth::id,
-        'other_id'=>$request->id,
+    $success=UserHelper::create([
+        'user_id'=>$id,
+       // 'other_id'=>$id,
+        'content'=>$request->content,
+    ])->get();
+    /*
+   $success= DB::table('user_helper')->insert([
+        'user_id'=>Auth::user()->id,
+        'other_id'=>$id,
         'content'=>$request->content,
       //  'user_id'=>Auth::id()
     ]);
+    */
+
+   // $report=$success->get();
+    return $this->sendResponse($success,'send request done');
 }
 public function reportComment(Request $request,$id)
 {
-    $comments=Comment::where('id',$id)->get();
+    //$post_id=Comment::where('id',$id)->get('post_id');
+  //  $other_id=Comment::where('id',$id)->get('user_id');
   //  $post=Post::where('id','')
+  $success=CommentHelper::create([
+    'comment_id'=>$id,
+   // 'other_id'=>$id,
+    'content'=>$request->content,
+])->get();
 
-    $comment_id=User::where('id')
-        DB::table('comment_helper')->insert([
-        'user_d'=>Auth::id,
-        'other_id'=>$other_id,
-        'content'=>$request->content,
-      //  'user_id'=>Auth::id()
-    ]);
+return $this->sendResponse($success,'send request done');
 }
-public function reportPost()
+public function reportPost(Request $request,$id)
 {
-    DB::table('user_helper')->insert([
-        'user_d'=>Auth::id,
-        'other_id'=>$request->id,
+    $success=PostHelper::create([
+        'post_id'=>$id,
+       // 'other_id'=>$id,
         'content'=>$request->content,
-      //  'user_id'=>Auth::id()
-    ]);
+    ])->get();
+    return $this->sendResponse($success,'send request done');
 }
-
-
-
 }
 
 

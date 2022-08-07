@@ -16,7 +16,7 @@ class HelperSeeder extends Seeder
     public function run()
     {
 
-        $helper=User::create([
+        $helper=User::create([  //user
                  'fullname'=>'Sumbul',
                  'email'=>'sumbul@gmail.com',
                  'email_verified_at'=>Carbon::now(),
