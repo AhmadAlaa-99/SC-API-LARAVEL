@@ -25,4 +25,5 @@ class AdminSeeder extends Seeder
                  'c_password'=>bcrypt('12345678'),
         ]);
     }
+    
 }

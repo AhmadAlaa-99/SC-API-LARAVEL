@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 use DB;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use App\Http\Controllers\BaseController as BaseController;
+use Illuminate\Support\Facades\Validator;
+use App\Models\User;
 
-class AdminController extends Controller
+class AdminController extends BaseController
 {
     public function index()
     {
@@ -70,22 +74,42 @@ class AdminController extends Controller
       DB::table('post_helper')->where('id',$id)->delete();
   }
 
+
   public function Helpers()
   {
      return  DB::table('users')
      ->where('role_as','=','2')
      ->orWhere('role_as','=','3')
      ->orWhere('role_as','=','4')
-     ->select('fullname','email')
+     ->select('id','fullname','email')
      ->get();
   }
+  
   public function EditHelper(Request $request,$id)
   {
-    return  DB::table('users')->where('id',$id)
-    ->update(
+    $input = $request->all();
+    $validator=Validator::make(
+      $input,
+      [
+          'fullname'=>'required|unique:users,fullname',
+        //  'email'=>'reauired|unique:users,email|email',
+          'password'=>'required|min:8|max:60',
+          'c_password'=>'required|same:password',
+       ]);
+      if ($validator->fails())
+      {
+          return $this->sendError($validator->errors()->first());
+          //return $this->sendError('Validator Error', $validator->errors());
+      }
+       $Helper=User::where('id',$id)->update(
       [
         'fullname'=>$request->fullname,
-        'email'=>$request->email,
-    ]);
+        //'email'=>$request->email,
+        'password'=>bcrypt($request->password),
+        'c_password'=>bcrypt($request->c_password),
+      ]);
+      return $this->sendResponse($Helper, 'Edit Helper Successfull');
+
+
   }
 }
