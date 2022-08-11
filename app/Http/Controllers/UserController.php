@@ -255,17 +255,16 @@ return $this->sendResponse($success,'send request done');
 }
 public function reportPost(Request $request,$id)
 {
-    $post=Post::where('id',$id)->pluck();
+    $post=Post::where('id',$id)->get();
    // public_path().'upload/Post_images/'.$image_name;
    // return $post->pluck('photo');
     $success=PostHelper::create([
        'post_id'=>$id,
-       'photo'=>public_path().'/upload/Post_images/'.$post,
+   //   'photo'=>$post,
        'content'=>$request->content,
     ])->get();
     return $this->sendResponse($success,'send request done');
 }
-
 public function imagepost($id)
      {
         $post=Post::select('photo')->where('id',$id)->get();
