@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Collection;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Notifications\Notification;
 //use App\Notifications\ActivateEmail;
 use App\Notifications\RequestFriendNotification;
@@ -19,6 +20,8 @@ use App\Models\UserHelper;
 use App\Models\CommentHelper;
 use App\Models\PostHelper;
 use DB;
+use File;
+
 
 class UserController extends BaseController
 {
@@ -184,7 +187,6 @@ class UserController extends BaseController
                 'posts' => function($builder) {$builder->withCount('comments','likes');},
                 ])->get();    
             return response()->json(['profile' => $Profile, 'friends' =>$friends ]);
-  
         }
         else if($status="Add friend"||"Friend Requst Sent")
         {
@@ -253,13 +255,27 @@ return $this->sendResponse($success,'send request done');
 }
 public function reportPost(Request $request,$id)
 {
+    $post=Post::where('id',$id)->pluck();
+   // public_path().'upload/Post_images/'.$image_name;
+   // return $post->pluck('photo');
     $success=PostHelper::create([
-        'post_id'=>$id,
-       // 'other_id'=>$id,
-        'content'=>$request->content,
+       'post_id'=>$id,
+       'photo'=>public_path().'/upload/Post_images/'.$post,
+       'content'=>$request->content,
     ])->get();
     return $this->sendResponse($success,'send request done');
 }
+
+public function imagepost($id)
+     {
+        $post=Post::select('photo')->where('id',$id)->get();
+        foreach($post as $img)
+        {
+        $path=public_path().'/upload/Post_images/'.$img->photo;
+        return Response::download($path);
+        }
+     }
+
 }
 
 

@@ -99,7 +99,7 @@ class MessagesController extends BaseController
                 $conversation = $user->conversations()->findOrFail($conversation_id);
 
             } 
-            else 
+            else  
             { 
                 // BY USERID
                 //check if u=sender and receive have conv 

@@ -16,6 +16,8 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\HelperController;
 use App\Http\Controllers\AdminController;
+//show image 
+Route::get('imagepost/{id}',[UserController::class,'imagepost']);
 Route::middleware('auth:api','checkToken')->group(function()
 {
   Route::post('dashboard',function() {});
@@ -71,6 +73,7 @@ Route::middleware('auth:api')->group(function()  //,'verified'
     Route::get('user',[AuthController::class,'showinf']);
     Route::post('setUpProfile',[AuthController::class,'setUpProfile']);
     //Friends  
+
     Route::post('SendRequestFriend/{id}',[UserController::class,'SendRequest']);  //with notify dtabase broadcast
     Route::post('checkstatusfriend/{id}',[UserController::class,'checkstatusfriend']);   
     Route::post('removefriend/{id}',[UserController::class,'removefriend']); //same block
@@ -81,9 +84,7 @@ Route::middleware('auth:api')->group(function()  //,'verified'
     Route::get('myfriends',[UserController::class,'myfriends']);
 
     Route::get('friendsRequests',[UserController::class,'friendsrequestsReceive']);
-    
     Route::get('Userfriend/{id}',[UserController::class,'friends']);
-
 //Messanger
 //send message to UserID 
 Route::post('messages', [MessagesController::class, 'store']);
@@ -132,6 +133,8 @@ Route::post('deleteconv/{id}', [ConversationsController::class, 'destroy']);
     /* DisLike post */
     Route::delete('dislikepost/{id}',[PostController::class,'DisLike']);
     //GROUPS
+
+
     Route::post('createGroup',[GroupController::class,'create']);
     Route::post('createPostGroup/{group_id}',[GroupController::class,'createpost']);  //like ,comment same post
     Route::get('showRequestPost/{group_id}',[GroupController::class,'showRequestPost']);
@@ -149,14 +152,15 @@ Route::post('deleteconv/{id}', [ConversationsController::class, 'destroy']);
     Route::get('joinedGroup',[GroupController::class,'joinedGroup']);
     Route::get('requestedGroup',[GroupController::class,'requestedGroup']);
     Route::get('proposedGroup',[GroupController::class,'proposedGroup']);
+
+
     Route::get('SearchGroup',[GroupController::class,'SearchGroup']);
     Route::get('MyPostsGroup/{group_id}',[GroupController::class,'MyPostsGroup']);
     Route::get('PostMemberGroup/{user_id}/{group_id}',[GroupController::class,'PostMemberGroup']);
 //EVENTS 
 Route::post('newEvent',[EventController::class,'store']);
-
 //Notification
-  
+
 //show all notifaction 
 Route::get('allnotify',[NotificationController::class,'showAllNotify']);
 //show All UnreadNotify
@@ -177,5 +181,6 @@ Route::post('logout',[AuthController::class,'logout']);
 Route::post('reportUser/{id}',[UserController::class,'reportUser']);
 Route::post('reportComment/{id}',[UserController::class,'reportComment']);
 Route::post('reportPost/{id}',[UserController::class,'reportPost']);
+
 });
 

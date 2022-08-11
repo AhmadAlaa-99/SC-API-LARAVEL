@@ -58,7 +58,7 @@ class CommentController extends BaseController
         $Comment->update([
             'Comment'=>$request->Comment,
         ]);
-        $infUser=User::where('id',$input['user_id'])->select('id','username','profile_image')->get();
+        $infUser=User::where('id',$input['user_id'])->select('id','fullname','profile_image')->get();
         $ownerID=Post::select('user_id')->where('id',$id)->first();
         $ownerPost=User::where('id',$ownerID)->first();
        // $ownerPost->notify(new CommentPostNotify($infUser));

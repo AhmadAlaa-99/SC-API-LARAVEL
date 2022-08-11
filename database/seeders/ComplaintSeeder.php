@@ -28,13 +28,13 @@ class ComplaintSeeder extends Seeder
             'content'=>$faker->paragraph(2, true),
         ]);
     }
-
         //POST
         for($i=0; $i<10 ;$i++)
         {
         DB::table('post_helper')->insert([
             'post_id'=>rand(1,5),
             'content'=>$faker->paragraph(2, true),
+          //  'photo'=>'public/upload/Post_images'.$this->faker->image(storage_path('images'),300,300),
         ]);
     }
         //COMMENT
@@ -47,6 +47,5 @@ class ComplaintSeeder extends Seeder
         ]);
     }
         //User
-
     }
 }
