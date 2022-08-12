@@ -38,7 +38,8 @@ class UserSeeder extends Seeder
                $post=Post::create([
                 'user_id'=>$i,
                 'Content'=>$faker->paragraph(),
-                'photo'=>'null',
+                //public_path().'/upload/Post_images/'.$image_name;   $image_name = time() . '.' . $request->photo->extension();
+              //  'photo'=>public_path().'/upload/Post_images'.$faker->image('public/images'),300,300),
             ]);
         }
         //Comment

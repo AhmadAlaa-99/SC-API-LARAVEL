@@ -147,7 +147,7 @@ class AuthController extends BaseController
             [
                 'email'=>'required|exists:users,email',
                 'password'=>'required|min:8|max:60',
-             ]);
+               ]);
             if ($validator->fails())
             {
                 return $this->sendError($validator->errors()->first());
@@ -300,7 +300,7 @@ class AuthController extends BaseController
             $user->email_verified_at=Carbon::now();
             if ($request->password=$user->password)
             {
-                $user->email=$request->newEmail;
+                $user->update(['email'=>$request->newEmail]);
             }
     }
 

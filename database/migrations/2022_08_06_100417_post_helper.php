@@ -19,7 +19,7 @@ class PostHelper extends Migration
        $table->id();
        $table->foreignId('post_id')->references('id')->on('post')->onDelete('cascade');
        $table->string('content');
-       $table->string('photo')->nullable();
+  //     $table->string('photo')->nullable();
        $table->enum('status',['0','1','2'])->default('0'); 
        $table->timestamps();
        });

@@ -77,11 +77,12 @@ class PostController extends BaseController
         $input['user_id'] = Auth::id();
         $image_name = time() . '.' . $request->photo->extension();
         $request->photo->move(public_path('upload/Post_images'), $image_name);
+        $path=public_path().'/upload/Post_images/'.$image_name;
         $Post = Post::create([
             'Content' => $request->Content,
          //   'Category'=>$request->Category,
             'user_id' => $input['user_id'],
-            'photo' => $image_name,
+            'photo' => $path,
 
         ]);
      //    $myfriendsID=app('App\Http\Controllers\UserController')->myfriends();

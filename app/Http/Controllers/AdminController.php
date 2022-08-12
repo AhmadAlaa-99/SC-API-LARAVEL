@@ -22,13 +22,13 @@ class AdminController extends BaseController
        $Post_Helper=DB::table('post_helper')
       ->join('post','post_helper.post_id','=','post.id')
       ->where('status','1')
-      ->select('post_helper.id','post_helper.post_id','post_helper.content','post.content','post.photo')
+      ->select('post_helper.id','post_helper.post_id','post_helper.content','post.Content','post.photo')
       ->get();
   
        $Comment_Helper=DB::table('comment_helper')
       ->join('comments','comment_helper.comment_id','=','comments.id')
       ->where('status','1')
-      ->select('comment_helper.id','comment_helper.comment_id','comment_helper.content','comments.comment')      ->get();
+      ->select('comment_helper.id','comment_helper.comment_id','comment_helper.content','comments.comment')->get();
       return [
         'UserHelper'=>$User_Helper,
         'PostHelper'=>$Post_Helper,
@@ -38,10 +38,19 @@ class AdminController extends BaseController
   public function IgnoreUser($id)      //delete
   {
         DB::table('user_helper')->where('id',$id)->delete();
+        DB::table('user_helper')
+        ->join('users','user_helper.user_id','=','users.id')
+        ->where('status','1')
+        ->select('user_helper.id','user_helper.user_id','user_helper.content','users.fullname','users.email')
+        ->get();
   }
  public function IgnoreComment($id)
   {
     DB::table('comment_helper')->where('id',$id)->delete();
+    DB::table('comment_helper')
+      ->join('comments','comment_helper.comment_id','=','comments.id')
+      ->where('status','1')
+      ->select('comment_helper.id','comment_helper.comment_id','comment_helper.content','comments.comment')->get();
   }
   public function IgnorePost($id)
   {
@@ -66,6 +75,10 @@ class AdminController extends BaseController
     $comment_id=  DB::table('comment_helper')->where('id',$id)->pluck('comment_id');
       DB::table('comments')->where('id',$comment_id)->delete();
       DB::table('comment_helper')->where('id',$id)->delete();
+      DB::table('comment_helper')
+      ->join('comments','comment_helper.comment_id','=','comments.id')
+      ->where('status','1')
+      ->select('comment_helper.id','comment_helper.comment_id','comment_helper.content','comments.comment')->get();
   }
   public function DeletePost($id)
   {

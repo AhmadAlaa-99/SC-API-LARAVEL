@@ -181,8 +181,8 @@ class UserController extends BaseController
         {
             //profile friend
             $friends=$this->friends($id);
-            $Profile=User::where('id',$id)->select('id','firstname','lastname','username'
-            ,'phone','city','country','email','profile_image')
+            $Profile=User::where('id',$id)->select('id','username'
+            ,'phone','country','profile_image')
             ->with([
                 'posts' => function($builder) {$builder->withCount('comments','likes');},
                 ])->get();    
@@ -196,7 +196,7 @@ class UserController extends BaseController
             ->get();
             return response()->json(['profile' => $Profile]);
 
-        }
+        } 
 
     }
 
@@ -220,6 +220,14 @@ class UserController extends BaseController
 
         return response()->json(['my_profile' => $MyProfile ]);
 }
+
+
+
+
+
+
+
+
 public function reportUser(Request $request,$id)
 {
     $user=User::where('id',$request->id)->get();
@@ -260,7 +268,7 @@ public function reportPost(Request $request,$id)
    // return $post->pluck('photo');
     $success=PostHelper::create([
        'post_id'=>$id,
-   //   'photo'=>$post,
+      // 'photo'=>$post,
        'content'=>$request->content,
     ])->get();
     return $this->sendResponse($success,'send request done');
@@ -270,7 +278,7 @@ public function imagepost($id)
         $post=Post::select('photo')->where('id',$id)->get();
         foreach($post as $img)
         {
-        $path=public_path().'/upload/Post_images/'.$img->photo;
+        $path=$img->photo;
         return Response::download($path);
         }
      }

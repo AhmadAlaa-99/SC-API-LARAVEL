@@ -31,8 +31,8 @@ class HelperController extends Controller
       return   DB::table('post_helper')
         ->join('post','post_helper.post_id','=','post.id')
         ->where('status','0')
-        ->select('post_helper.id','post_helper.post_id','post_helper.content','post.content','post.photo')
-        ->get();
+        ->select('post_helper.id','post_helper.post_id','post_helper.content','post.Content','post.photo')
+        ->get(); 
     }
     if($user->role_as=="4")  //Comment
     {

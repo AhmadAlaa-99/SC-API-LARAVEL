@@ -34,9 +34,8 @@ class ComplaintSeeder extends Seeder
         DB::table('post_helper')->insert([
             'post_id'=>rand(1,5),
             'content'=>$faker->paragraph(2, true),
-          //  'photo'=>'public/upload/Post_images'.$this->faker->image(storage_path('images'),300,300),
         ]);
-    }
+         }
         //COMMENT
         for($i=0; $i<15 ;$i++)
         {
